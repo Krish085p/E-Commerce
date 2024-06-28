@@ -7,5 +7,5 @@ import ShopContextProvider from './Context/ShopContext'
 ReactDOM.createRoot(document.getElementById('root')).render(
   <ShopContextProvider>
         <App />
-    </ShopContextProvider>
+  </ShopContextProvider>
 )

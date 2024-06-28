@@ -1,24 +1,25 @@
+const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const userSchema = new Schema({
-    name:{
+    name: {
         type: String,
     },
-    email:{
+    email: {
         type: String, unique: true,
     },
-    password:{
-        type: String, 
+    password: {
+        type: String,
     },
-    cartData:{
-        type:Object,
+    cartData: {
+        type: Object,
     },
-    date:{
+    date: {
         type: Date,
         default: Date.now,
     }
-})
+});
 
 const User = mongoose.model('User', userSchema);
 
-module.export = User;
+module.exports = User; // Corrected this line
