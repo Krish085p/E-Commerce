@@ -15,19 +15,37 @@
     align-items: center;
 }
 
+.shopcategory-indexsort p span {
+    font-weight: 600; /* Increased font weight for emphasis */
+    margin: 20px 0; /* Adjusted vertical margin */
+    padding: 8px 12px; /* Added padding for better spacing */
+    border-radius: 10px; /* Rounded corners */
+    background-color: #f0f0f0; /* Light gray background */
+    display: inline-block; /* Ensures padding works correctly */
+  }
+
+
 .shopcategory-sort {
     padding: 5px 10px;
     border-radius: 20px;
+    margin-right: 130px;
+    margin-left: 1800px;
     border: 1px solid #888;
     display: flex;
+    justify-content: flex-end;
     align-items: center;
     font-size: 14px;
     cursor: pointer;
-}
+    /* New styles for the image */
+    background-color: #f0f0f0; /* Light gray background */
+    padding-right: 8px; /* Add some padding to the right of the text */
+  }
 
-.shopcategory-indexsort p span {
-    font-weight: 600;
-}
+  .shopcategory-sort img {
+    width: 16px; /* Adjust the size of the image */
+    margin-left: 5px; /* Space between text and image */
+  }
+
 
 .shopcategory-products {
     margin: 20px 170px;
