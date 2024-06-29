@@ -3,135 +3,95 @@
     display: flex;
     flex-direction: column;
     gap: 20px;
-    transition: transform 0.6s;
+    transition: transform 0.3s ease-in-out; /* Smoothens the transition */
+
+    /* Rounded corners and box shadow for a card-like effect */
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    background-color: #ffffff;
 }
 
 .item img {
-    width: 100%; /* Use full width for better responsiveness */
+    width: 100%;
+    height: auto; /* Ensures images scale proportionally */
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
 }
 
 .item p {
     margin: 6px 0;
+    text-align: left; /* Aligns text to the left */
+    color: #374151; /* Dark text color */
 }
 
 .item-prices {
     display: flex;
-    gap: 20px;
+    justify-content: space-between; /* Distributes items evenly */
+    align-items: center; /* Centers items vertically */
+    padding: 0 10px; /* Adds padding around prices */
 }
 
 .item-price-new {
-    color: #374151;
+    color: #4b5563; /* Slightly lighter text for new price */
     font-size: 18px;
     font-weight: 600;
 }
 
 .item-price-old {
-    color: #8c8c8c;
-    font-size: 18px;
-    font-weight: 500;
+    color: #6b7280; /* Lighter text color for old price */
+    font-size: 16px;
     text-decoration: line-through;
 }
 
 .item:hover {
-    transform: scale(1.05);
+    transform: scale(1.03); /* Slightly scale up on hover for subtle effect */
+    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2); /* Enhanced shadow on hover */
 }
 
 @media (max-width: 1280px) {
     .item {
         width: 220px;
-        font-size: 14px;
-        justify-content: center;
     }
 
     .item img {
-        width: 220px;
-    }
-
-    .item-price-new {
-        font-size: 16px;
-    }
-
-    .item-price-old {
-        font-size: 14px;
+        width: 100%;
     }
 }
 
 @media (max-width: 1024px) {
     .item {
         width: 170px;
-        font-size: 13px;
-        justify-content: center;
-    }
-
-    .item img {
-        width: 170px;
-    }
-
-    .item-price-new {
-        font-size: 14px;
-    }
-
-    .item-price-old {
-        font-size: 13px;
     }
 }
 
 @media (max-width: 800px) {
     .item {
         width: 150px;
-        font-size: 12px;
-        justify-content: center;
-    }
-
-    .item img {
-        width: 150px;
-    }
-
-    .item-price-new {
-        font-size: 13px;
-    }
-
-    .item-price-old {
-        font-size: 12px;
     }
 }
 
 @media (max-width: 600px) {
     .item {
         width: 100%; /* Use full width for smaller screens */
-        font-size: 12px;
-        justify-content: center;
-    }
-
-    .item img {
-        width: 100%; /* Use full width for smaller screens */
-    }
-
-    .item-price-new {
-        font-size: 12px;
-    }
-
-    .item-price-old {
-        font-size: 11px;
+        padding: 10px; /* Adjust padding for smaller screens */
     }
 }
 
 @media (max-width: 500px) {
     .item {
         width: 100%; /* Use full width for very small screens */
-        font-size: 11px;
-        justify-content: center;
     }
 
-    .item img {
-        width: 100%; /* Use full width for very small screens */
+    .item p {
+        font-size: 14px; /* Increase font size for readability */
     }
 
     .item-price-new {
-        font-size: 11px;
+        font-size: 14px; /* Adjust font size */
     }
 
     .item-price-old {
-        font-size: 10px;
+        font-size: 12px; /* Adjust font size */
     }
 }
