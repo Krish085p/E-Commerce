@@ -27,10 +27,14 @@ const AddProduct = () => {
 
      try {
         // Upload image first
-        const uploadResponse = await fetch('http://localhost:4000/upload', {
+        const uploadResponse = await fetch('http://localhost:4000/api/upload', {
             method: 'POST',
             body: formData,
         });
+
+        if (!uploadResponse.ok) {
+            throw new Error('Image upload failed');
+        }
 
         const uploadData = await uploadResponse.json();
 
@@ -42,7 +46,7 @@ const AddProduct = () => {
             };
 
             // Add product details to database
-            const addProductResponse = await fetch('http://localhost:4000/addproduct', {
+            const addProductResponse = await fetch('http://localhost:4000/api/addproduct', {
                 method: 'POST',
                 headers: {
                     Accept: 'application/json',
@@ -50,6 +54,10 @@ const AddProduct = () => {
                 },
                 body: JSON.stringify(product),
             });
+
+            if (!addProductResponse.ok) {
+                throw new Error('Product addition failed');
+            }
 
             const addProductData = await addProductResponse.json();
 
@@ -71,7 +79,7 @@ const AddProduct = () => {
             alert("Failed to upload image");
         }
      } catch (error) {
-        console.error('Error:', error);
+        console.error('Error:', error.message);
         alert('An error occurred while adding the product. Please try again.');
      }
    };
