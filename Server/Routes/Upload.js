@@ -36,8 +36,5 @@ router.post("/upload", upload.single("product"), (req, res) => {
   });
 });
 
-router.get("/uploadstesting", (req,res) => {
-  res.send("Successfull");
-})
 
 module.exports = router;
