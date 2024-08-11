@@ -1,5 +1,6 @@
 import React, { createContext, useEffect, useState } from "react";
 
+
 export const ShopContext = createContext();
 
 const getDefaultCart = () => {
@@ -22,7 +23,7 @@ const ShopContextProvider = (props) => {
     }
 
     // Fetch all products
-    fetch("http://localhost:4000/api/allproducts")
+    fetch(`${process.env.REACT_APP_CLIENT_URL}/api/allproducts`)
       .then((response) => {
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
@@ -34,7 +35,7 @@ const ShopContextProvider = (props) => {
 
     // If user is logged in, update cart items from the server
     if (localStorage.getItem("auth-token")) {
-      fetch("http://localhost:4000/api/getcart", {
+      fetch(`${process.env.REACT_APP_CLIENT_URL}/api/getcart`, {
         method: "POST",
         headers: {
           Accept: "application/json",
@@ -65,7 +66,7 @@ const ShopContextProvider = (props) => {
     setCartItems((prev) => ({ ...prev, [itemId]: (prev[itemId] || 0) + 1 }));
 
     if (localStorage.getItem("auth-token")) {
-      fetch("http://localhost:4000/api/addtocart", {
+      fetch(`${process.env.REACT_APP_CLIENT_URL}/api/addtocart`, {
         method: "POST",
         headers: {
           Accept: "application/json",
@@ -95,7 +96,7 @@ const ShopContextProvider = (props) => {
     });
 
     if (localStorage.getItem("auth-token")) {
-      fetch("http://localhost:4000/api/removefromcart", {
+      fetch(`${process.env.REACT_APP_CLIENT_URL}/api/removefromcart`, {
         method: "POST",
         headers: {
           Accept: "application/json",

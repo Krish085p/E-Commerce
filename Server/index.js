@@ -11,6 +11,8 @@ app.use(express.json());
 app.use(cors());
 
 connectToDb();
+ 
+
 
 const addproduct = require("./Routes/Addproduct");
 const addtocart = require("./Routes/AddtoCart");
@@ -35,6 +37,7 @@ app.use("/api", removefromcart);
 app.use("/api", removeproduct);
 app.use("/api", signup);
 app.use("/api", uploads);
+
 
 app.use((err, req, res, next) => {
   console.error(err.stack);
