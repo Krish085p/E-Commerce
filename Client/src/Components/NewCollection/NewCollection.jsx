@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import './NewCollection.css';
 import Item from '../Item/Item';
+const apiUrl = import.meta.env.VITE_API_URL;
 
 const NewCollection = () => {
   const [newCollection, setNewCollection] = useState([]);
 
   useEffect(() => {
-    fetch(`${process.env.REACT_APP_CLIENT_URL}/newcollections`)
+    fetch(`${apiUrl}/newcollections`)
       .then(response => response.json())
       .then(data => setNewCollection(data))
       .catch(error => console.error('Error fetching new collections:', error));
