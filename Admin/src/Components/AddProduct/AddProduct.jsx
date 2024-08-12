@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import './AddProduct.css';
 import upload_area from "../assets/upload_area.svg";
+const apiUrl = import.meta.env.VITE_API_URL;
 
 const AddProduct = () => {
    const [image, setImage] = useState(null);
@@ -27,7 +28,7 @@ const AddProduct = () => {
 
      try {
         // Upload image first
-        const uploadResponse = await fetch('http://localhost:4000/api/upload', {
+        const uploadResponse = await fetch(`${apiUrl}/api/upload`, {
             method: 'POST',
             body: formData,
         });
@@ -46,7 +47,7 @@ const AddProduct = () => {
             };
 
             // Add product details to database
-            const addProductResponse = await fetch('http://localhost:4000/api/addproduct', {
+            const addProductResponse = await fetch(`${apiUrl}/api/addproduct`, {
                 method: 'POST',
                 headers: {
                     Accept: 'application/json',
