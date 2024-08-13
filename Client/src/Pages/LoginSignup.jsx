@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import "./CSS/LoginSignup.css";
+const apiUrl = import.meta.env.VITE_API_URL;
 
 const LoginSignup = () => {
   const [state, setState] = useState("Login");
@@ -26,7 +27,7 @@ const LoginSignup = () => {
     setError(""); // Clear any previous errors
     console.log("Login function Executed");
     try {
-      const response = await fetch("http://localhost:4000/login", {
+      const response = await fetch(`${apiUrl}/api/login`, {
         method: "POST",
         headers: {
           Accept: "application/json",
@@ -53,7 +54,7 @@ const LoginSignup = () => {
     console.log("Sign Up function Executed", formData);
     
     try {
-      const response = await fetch("http://localhost:4000/signup", {
+      const response = await fetch(`${apiUrl}/api/signup`, {
         method: "POST",
         headers: {
           Accept: "application/json",
