@@ -8,7 +8,10 @@ const ListProduct = () => {
 
   const fetchInfo = async () => {
     try {
-      const response = await fetch(`${apiUrl}/allproducts`);
+      const response = await fetch(`${apiUrl}/api/allproducts`);
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
       const data = await response.json();
       setAllProducts(data);
     } catch (error) {
@@ -22,7 +25,7 @@ const ListProduct = () => {
 
   const remove_product = async (id) => {
     try {
-      await fetch(`${apiUrl}/removeproduct`, {
+      await fetch(`${apiUrl}/api/removeproduct`, {
         method: 'POST',
         headers: {
           Accept: 'application/json',
