@@ -9,7 +9,9 @@ import RelatedProduct from '../Components/RelatedProduct/RelatedProduct';
 const Product = () => {
   const { all_product } = useContext(ShopContext);
   const { productId } = useParams();
-  const product = all_product.find((e) => e.id === Number(productId));
+  
+  // Adjust to handle string ID if necessary
+  const product = all_product.find((e) => e._id === productId);
 
   if (!product) {
     return <p>Product not found</p>;
@@ -20,7 +22,7 @@ const Product = () => {
       <Breadcrum props={product} />
       <Productdisplay product={product} />
       <DescriptionBox />
-      <RelatedProduct />
+      <RelatedProduct />    
     </>
   );
 }

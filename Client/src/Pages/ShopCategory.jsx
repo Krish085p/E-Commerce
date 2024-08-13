@@ -25,7 +25,7 @@ const ShopCategory = ({ banner, category }) => {
         {filteredProducts.map((item, index) => (
           <Item
             key={index}
-            id={item.id}
+            id={item._id}
             name={item.name}
             image={item.image}
             new_price={item.new_price}
