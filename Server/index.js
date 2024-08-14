@@ -8,7 +8,14 @@ dotenv.config();
 
 const app = express();
 app.use(express.json());
-app.use(cors());
+// Enable CORS for the specific origin of your client application
+const allowedOrigins = ['https://e-commerce-client-pink.vercel.app','https://e-commerce-admin-brown-seven.vercel.app']; // Replace with your actual origin
+console.log(allowedOrigins,"server")
+const corsOptions = {
+    origin: allowedOrigins
+};
+
+app.use(cors(corsOptions));
 
 app.get("/", (req,res) => {
   res.send("It's working!!");
