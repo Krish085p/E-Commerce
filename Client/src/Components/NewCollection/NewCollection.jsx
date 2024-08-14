@@ -7,7 +7,7 @@ const NewCollection = () => {
   const [newCollection, setNewCollection] = useState([]);
 
   useEffect(() => {
-    fetch(`${apiUrl}/newcollections`)
+    fetch(`${apiUrl}/api/newcollections`)
       .then(response => response.json())
       .then(data => setNewCollection(data))
       .catch(error => console.error('Error fetching new collections:', error));
@@ -23,7 +23,7 @@ const NewCollection = () => {
             key={item.id}
             id={item.id}
             name={item.name}
-            image={item.image}
+            image={`${apiUrl}/${item.image}`}
             new_price={item.new_price}
             old_price={item.old_price}
           />

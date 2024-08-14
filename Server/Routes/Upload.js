@@ -32,7 +32,7 @@ router.post("/upload", upload.single("product"), (req, res) => {
       .json({ success: false, message: "No file uploaded" });
   res.json({
     success: true,
-    image_url: `http://localhost:4000/api/images/${req.file.filename}`,
+    image_url: `api/images/${req.file.filename}`,
   });
 });
 

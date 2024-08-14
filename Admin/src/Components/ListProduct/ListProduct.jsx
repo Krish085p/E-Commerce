@@ -31,7 +31,7 @@ const ListProduct = () => {
           Accept: 'application/json',
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ id: id })
+        body: JSON.stringify({ id })
       });
       await fetchInfo(); // Update the product list after removal
     } catch (error) {
@@ -51,14 +51,19 @@ const ListProduct = () => {
         <p>Remove</p>
       </div>
       <div className="listproduct-allproducts">
-        {allProducts.map((product) => (
-          <div className="listproduct-format-main listproduct-format" key={product.id}>
-            <img src={product.image} className="listproduct-product-icon" alt=""/>
-            <p>{product.name}</p>
-            <p>${product.old_price}</p>
-            <p>${product.new_price}</p>
-            <p>{product.category}</p>
-            <img onClick={() => remove_product(product.id)} className='listproduct-remove-icon' src={cross_icon} alt=""/>
+        {allProducts.map((pro) => (
+          <div className="listproduct-format-main listproduct-format" key={pro.id}>
+            <img src={`${apiUrl}/${pro.image}`} className="listproduct-product-icon" alt={pro.name} />
+            <p>{pro.name}</p>
+            <p>${pro.old_price}</p>
+            <p>${pro.new_price}</p>
+            <p>{pro.category}</p>
+            <img
+              onClick={() => remove_product(pro.id)}
+              className='listproduct-remove-icon'
+              src={cross_icon}
+              alt="Remove"
+            />
           </div>
         ))}
       </div>

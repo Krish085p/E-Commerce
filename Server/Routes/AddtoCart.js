@@ -3,12 +3,12 @@ const router = express.Router();
 const User = require("../Schemas/User.js");
 const jwt = require("jsonwebtoken");
 
+// Middleware to fetch and verify the user
 const fetchUser = async (req, res, next) => {
   const token = req.header("auth-token");
-  if (!token)
-    return res
-      .status(401)
-      .json({ errors: "Please authenticate using a valid token" });
+  if (!token) {
+    return res.status(401).json({ errors: "Please authenticate using a valid token" });
+  }
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     req.user = decoded.user;
@@ -18,16 +18,40 @@ const fetchUser = async (req, res, next) => {
   }
 };
 
+// Route to add item to cart
 router.post("/addtocart", fetchUser, async (req, res) => {
   const { itemId } = req.body;
-  if (!itemId) return res.status(400).json({ errors: "Item ID is required" });
+  if (!itemId) {
+    return res.status(400).json({ errors: "Item ID is required" });
+  }
+
   try {
     let userData = await User.findById(req.user.id);
-    if (!userData) return res.status(404).json({ errors: "User not found" });
-    if (!userData.cartData) userData.cartData = {};
-    if (!userData.cartData[itemId]) userData.cartData[itemId] = 0;
+    if (!userData) {
+      return res.status(404).json({ errors: "User not found" });
+    }
+    
+    // Initialize cartData if not already
+    if (!userData.cartData) {
+      userData.cartData = {};
+    }
+    
+    // Ensure itemId is a string and not an object
+    if (typeof itemId !== 'string') {
+      return res.status(400).json({ errors: "Invalid item ID format" });
+    }
+
+    // Initialize item quantity if it doesn't exist
+    if (!userData.cartData[itemId]) {
+      userData.cartData[itemId] = 0;
+    }
+
+    // Increment the item quantity
     userData.cartData[itemId] += 1;
+
+    // Save the updated user data
     await userData.save();
+
     res.json({ message: "Item added to cart", cartData: userData.cartData });
   } catch (error) {
     console.error("Error adding item to cart:", error);

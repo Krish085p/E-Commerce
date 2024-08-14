@@ -3,6 +3,7 @@ import './Productdisplay.css';
 import star_icon from '../Assets/star_icon.png';
 import star_dull_icon from '../Assets/star_dull_icon.png';
 import { ShopContext } from '../../Context/ShopContext';
+const apiUrl = import.meta.env.VITE_API_URL;
 
 const Productdisplay = (props) => {
     const { product } = props;
@@ -11,13 +12,13 @@ const Productdisplay = (props) => {
         <div className='productdisplay'>
             <div className="productdisplay-left">
                 <div className="productdisplay-img-list">
-                    <img src={product.image} alt=""/>
-                    <img src={product.image} alt=""/>
-                    <img src={product.image} alt=""/>
-                    <img src={product.image} alt=""/>
+                    <img src={`${apiUrl}/${product.image}`} alt=""/>
+                    <img src={`${apiUrl}/${product.image}`} alt=""/>
+                    <img src={`${apiUrl}/${product.image}`} alt=""/>
+                    <img src={`${apiUrl}/${product.image}`} alt=""/>
                 </div>
                 <div className="productdisplay-img">
-                    <img className="productdisplay-main-img" src={product.image} alt=""/>
+                    <img className="productdisplay-main-img" src={`${apiUrl}/${product.image}`} alt=""/>
                 </div>
             </div>
             <div className="productdisplay-right">

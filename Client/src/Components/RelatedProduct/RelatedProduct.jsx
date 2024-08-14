@@ -17,4 +17,4 @@ const RelatedProduct = () => {
   )
 }
 
-export default RelatedProduct
+export default RelatedProduct;

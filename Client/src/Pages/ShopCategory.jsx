@@ -3,6 +3,7 @@ import './CSS/ShopCategory.css';
 import { ShopContext } from '../Context/ShopContext';
 import dropdown_icon from '../Components/Assets/dropdown_icon.png';
 import Item from '../Components/Item/Item';
+const apiUrl = import.meta.env.VITE_API_URL;
 
 const ShopCategory = ({ banner, category }) => {
   const { all_product } = useContext(ShopContext);
@@ -27,7 +28,7 @@ const ShopCategory = ({ banner, category }) => {
             key={index}
             id={item._id}
             name={item.name}
-            image={item.image}
+            image={`${apiUrl}/${item.image}`}
             new_price={item.new_price}
             old_price={item.old_price}
           />
