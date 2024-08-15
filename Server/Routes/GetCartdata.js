@@ -18,7 +18,7 @@ const fetchUser = async (req, res, next) => {
   }
 };
 
-router.get("/getcart", fetchUser, async (req, res) => {
+router.post("/getcart", fetchUser, async (req, res) => {
   try {
     const userData = await User.findById(req.user.id);
     res.json(userData.cartData);
