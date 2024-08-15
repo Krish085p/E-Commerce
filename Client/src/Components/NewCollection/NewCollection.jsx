@@ -13,15 +13,21 @@ const NewCollection = () => {
       .catch(error => console.error('Error fetching new collections:', error));
   }, []);
 
+  const eventHandler = (itemId) => {
+    return () => {
+      navigate(`/product/${itemId}`); 
+    };
+  };
+
   return (
     <div className='newcollection'>
       <h1>NEW COLLECTIONS</h1>
       <hr/>
       <div className="newcollection-items">
         {newCollection.map(item => (
-          <Item
+          <Item onClick = {eventHandler(item._id)}
             key={item.id}
-            id={item.id}
+            id={item._id}
             name={item.name}
             image={`${apiUrl}/${item.image}`}
             new_price={item.new_price}
