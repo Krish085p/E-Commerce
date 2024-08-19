@@ -6,6 +6,7 @@ import Productdisplay from '../Components/Productdisplay/Productdisplay';
 import DescriptionBox from '../Components/DescriptionBox/DescriptionBox';
 import RelatedProduct from '../Components/RelatedProduct/RelatedProduct';
 
+
 const Product = () => {
   const { all_product } = useContext(ShopContext);
   const { productId } = useParams();
@@ -22,7 +23,7 @@ const Product = () => {
       <Breadcrum props={product} />
       <Productdisplay product={product} />
       <DescriptionBox />
-      <RelatedProduct category={product.category}/>    
+      <RelatedProduct category={product.category} proId = {product._id}/>    
     </>
   );
 }

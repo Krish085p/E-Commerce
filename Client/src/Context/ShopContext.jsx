@@ -1,12 +1,12 @@
 import React, { createContext, useEffect, useState } from "react";
-const apiUrl = import.meta.env.VITE_API_URL;
 
+const apiUrl = import.meta.env.VITE_API_URL;
 
 export const ShopContext = createContext();
 
 const getDefaultCart = () => {
   let cart = {};
-  for (let index = 0; index < 300 + 1; index++) {
+  for (let index = 0; index < 301; index++) { // 301 to include index 300
     cart[index] = 0;
   }
   return cart;
@@ -35,12 +35,13 @@ const ShopContextProvider = (props) => {
       .catch((error) => console.error("Failed to fetch products:", error));
 
     // If user is logged in, update cart items from the server
-    if (localStorage.getItem("auth-token")) {
+    const authToken = localStorage.getItem("auth-token");
+    if (authToken) {
       fetch(`${apiUrl}/api/getcart`, {
         method: "POST",
         headers: {
           Accept: "application/json",
-          "auth-token": localStorage.getItem("auth-token"),
+          "auth-token": authToken,
           "Content-Type": "application/json",
         },
       })
@@ -66,15 +67,16 @@ const ShopContextProvider = (props) => {
   const addToCart = (itemId) => {
     setCartItems((prev) => ({ ...prev, [itemId]: (prev[itemId] || 0) + 1 }));
 
-    if (localStorage.getItem("auth-token")) {
+    const authToken = localStorage.getItem("auth-token");
+    if (authToken) {
       fetch(`${apiUrl}/api/addtocart`, {
         method: "POST",
         headers: {
           Accept: "application/json",
-          "auth-token": localStorage.getItem("auth-token"),
+          "auth-token": authToken,
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ itemId: itemId }),
+        body: JSON.stringify({ itemId }),
       })
         .then((resp) => {
           if (!resp.ok) {
@@ -83,7 +85,11 @@ const ShopContextProvider = (props) => {
           return resp.json();
         })
         .then((data) => console.log(data))
-        .catch((error) => console.error("Failed to add item to cart:", error));
+        .catch((error) => {
+          console.error("Failed to add item to cart:", error);
+        });
+    } else {
+      console.warn("No auth-token found in local storage.");
     }
   };
 
@@ -96,15 +102,16 @@ const ShopContextProvider = (props) => {
       return updatedCartItems;
     });
 
-    if (localStorage.getItem("auth-token")) {
+    const authToken = localStorage.getItem("auth-token");
+    if (authToken) {
       fetch(`${apiUrl}/api/removefromcart`, {
         method: "POST",
         headers: {
           Accept: "application/json",
-          "auth-token": localStorage.getItem("auth-token"),
+          "auth-token": authToken,
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ itemId: itemId }),
+        body: JSON.stringify({ itemId }),
       })
         .then((resp) => {
           if (!resp.ok) {
@@ -113,9 +120,7 @@ const ShopContextProvider = (props) => {
           return resp.json();
         })
         .then((data) => console.log(data))
-        .catch((error) =>
-          console.error("Failed to remove item from cart:", error)
-        );
+        .catch((error) => console.error("Failed to remove item from cart:", error));
     }
   };
 
@@ -123,9 +128,7 @@ const ShopContextProvider = (props) => {
     let totalAmount = 0;
     for (const item in cartItems) {
       if (cartItems[item] > 0) {
-        let itemInfo = all_product.find(
-          (product) => product.id === Number(item)
-        );
+        const itemInfo = all_product.find((product) => product.id === Number(item));
         if (itemInfo) {
           totalAmount += itemInfo.new_price * cartItems[item];
         }
@@ -135,16 +138,9 @@ const ShopContextProvider = (props) => {
   };
 
   const getTotalCartItems = () => {
-    let totalItems = 0;
-    for (const item in cartItems) {
-      if (cartItems[item] > 0) {
-        totalItems += cartItems[item];
-      }
-    }
-    return totalItems;
+    return Object.values(cartItems).reduce((total, quantity) => total + quantity, 0);
   };
 
-  // Function to handle logout
   const handleLogout = () => {
     localStorage.removeItem("auth-token");
     setCartItems(getDefaultCart()); // Reset cart items to default empty cart
@@ -158,7 +154,7 @@ const ShopContextProvider = (props) => {
     cartItems,
     addToCart,
     removeFromCart,
-    handleLogout, // Expose logout function to context
+    handleLogout,
   };
 
   return (

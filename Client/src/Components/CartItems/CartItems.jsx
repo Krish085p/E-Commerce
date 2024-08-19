@@ -18,21 +18,21 @@ const CartItems = () => {
         <p>Remove</p>
       </div>
       <hr />
-      {all_product.map((e) => {
-        if (cartItems[e.id] > 0) {
+      {all_product.map((product) => {
+        const quantity = cartItems[product.id];
+        if (quantity > 0) {
           return (
-            <div className="cartitems-format" key={e.id}>
-              <img src={e.image} alt="" className="carticon-product-icon" />
-              <p>{e.name}</p>
-              <p>${e.new_price}</p>
-              <button className="cartitems-quantity">{cartItems[e.id]}</button>
-              <p>${e.new_price * cartItems[e.id]}</p>
+            <div className="cartitems-format" key={product.id}>
+              <img src={product.image} alt={product.name} className="carticon-product-icon" />
+              <p>{product.name}</p>
+              <p>${product.new_price}</p>
+              <button className="cartitems-quantity">{quantity}</button>
+              <p>${product.new_price * quantity}</p>
               <img
                 src={remove_icon}
-                onClick={() => {
-                  removeFromCart(e.id);
-                }}
+                onClick={() => removeFromCart(product.id)}
                 alt="remove"
+                className="cartitems-remove-icon"
               />
             </div>
           );
@@ -42,30 +42,30 @@ const CartItems = () => {
       <div className="cartitems-down">
         <h1>Cart Totals</h1>
         <div className="cartitems-total">
-            <div>
-                <div className="cartitems-total-item">
-                    <p>Subtotal</p>
-                    <p>${totalCartAmount}</p>
-                </div>
-                <hr/>
-                <div className="cartitems-total-item">
-                    <p>Shipping Fee</p>
-                    <p>Free</p>
-                </div>
-                <hr/>
-                <div className="cartitems-total-item">
-                    <h3>Total</h3>
-                    <h3>${totalCartAmount}</h3>
-                </div>
+          <div>
+            <div className="cartitems-total-item">
+              <p>Subtotal</p>
+              <p>${totalCartAmount}</p>
             </div>
-            <button>PROCEED TO CHECKOUT</button>
+            <hr />
+            <div className="cartitems-total-item">
+              <p>Shipping Fee</p>
+              <p>Free</p>
+            </div>
+            <hr />
+            <div className="cartitems-total-item">
+              <h3>Total</h3>
+              <h3>${totalCartAmount}</h3>
+            </div>
+          </div>
+          <button>PROCEED TO CHECKOUT</button>
         </div>
         <div className="cartitems-promocode">
-            <p>If you have a promo code, enter it here</p>
-            <div className="cartitems-promobox">
-                <input type="text" placeholder="promo code"/>
-                <button>Submit</button>
-            </div>
+          <p>If you have a promo code, enter it here</p>
+          <div className="cartitems-promobox">
+            <input type="text" placeholder="promo code" />
+            <button>Submit</button>
+          </div>
         </div>
       </div>
     </div>
