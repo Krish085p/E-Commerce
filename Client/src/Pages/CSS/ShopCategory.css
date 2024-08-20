@@ -25,7 +25,8 @@
   }
 
 
-.shopcategory-sort {
+  .shopcategory-sort {
+    position: relative; /* Allows the dropdown menu to be positioned relative to this div */
     padding: 5px 10px;
     border-radius: 20px;
     margin-right: 130px;
@@ -36,16 +37,21 @@
     align-items: center;
     font-size: 14px;
     cursor: pointer;
-    /* New styles for the image */
     background-color: #f0f0f0; /* Light gray background */
-    padding-right: 8px; /* Add some padding to the right of the text */
+    padding-right: 8px; /* Space to the right of the text */
+}
+
+  .shopcategory-indexsort img {
+    width: 30px; /* Adjust the size of the image */
+    margin-left: 10px;  /* Space between text and image */
+    display: flex;
   }
 
-  .shopcategory-sort img {
-    width: 16px; /* Adjust the size of the image */
-    margin-left: 5px; /* Space between text and image */
-  }
-
+  .shopcategory-sort button {
+    padding-left: 5px;
+    padding-right: 5px;
+    transition: all 0.2s;
+  } 
 
 .shopcategory-products {
     margin: 20px 170px;
@@ -53,6 +59,44 @@
     grid-template-columns: 1fr 1fr 1fr 1fr;
     row-gap: 80px;
 }
+
+.dropdown-menu {
+    position: absolute;
+    top: 100%; /* Position it just below the shopcategory-sort div */
+    right: 0;
+    background-color: white;
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+    list-style-type: none;
+    padding: 10px 0;
+    margin: 0;
+    width: 150px;
+    border-radius: 8px; /* Match existing rounded corners */
+    font-size: 14px; /* Consistent with other text elements */
+}
+
+/* Individual dropdown items */
+.dropdown-menu li {
+    padding: 8px 16px;
+    cursor: pointer;
+    transition: background-color 0.2s; /* Smooth transition for hover effect */
+}
+
+/* Hover effect for dropdown items */
+.dropdown-menu li:hover {
+    background-color: #f0f0f0; /* Match light gray background in other elements */
+}
+
+/* Button within shopcategory-sort */
+.shopcategory-sort button {
+    background: none;
+    border: none;
+    padding-left: 5px;
+    padding-right: 5px;
+    transition: all 0.2s;
+    cursor: pointer;
+}
+
 
 .shopcategory-loadmore {
     display: flex;
@@ -79,8 +123,11 @@
         margin: auto;
     }
     .shopcategory-sort {
-        padding: 5px 10px;
+        margin-left: auto;
         font-size: 12px;
+    }
+    .dropdown-menu {
+        width: 130px;
     }
     .shopcategory-indexsort p {
         font-size: 12px;
@@ -125,6 +172,13 @@
         height: 55px;
         font-size: 14px;
     }
+
+    .shopcategory-sort {
+        font-size: 12px;
+    }
+    .dropdown-menu {
+        width: 120px;
+    }
 }
 
 @media (max-width: 800px) {
@@ -153,6 +207,16 @@
         height: 40px;
         font-size: 13px;
     }
+
+    .shopcategory-sort {
+        margin-left: auto;
+        font-size: 12px;
+        justify-content: space-between;
+        width: 100%;
+    }
+    .dropdown-menu {
+        width: 110px;
+    }
 }
 
 @media (max-width: 500px) {
@@ -180,5 +244,15 @@
         width: 150px;
         height: 40px;
         font-size: 13px;
+    }
+
+    .shopcategory-sort {
+        margin-left: auto;
+        font-size: 12px;
+        justify-content: space-between;
+        width: 100%;
+    }
+    .dropdown-menu {
+        width: 100px;
     }
 }
