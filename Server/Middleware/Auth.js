@@ -1,4 +1,4 @@
-const fetchUser = async (req, res, next) => {
+const auth = async (req, res, next) => {
     const token = req.header("Authorization")?.replace("Bearer ", "");
     
     console.log("Hell0", token)
@@ -16,4 +16,4 @@ const fetchUser = async (req, res, next) => {
     }
 };
 
-module.exports = fetchUser;
+module.exports = auth;
