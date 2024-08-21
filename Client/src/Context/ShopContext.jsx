@@ -65,7 +65,11 @@ const ShopContextProvider = (props) => {
   }, [cartItems]);
 
   const addToCart = (itemId) => {
-    setCartItems((prev) => ({ ...prev, [itemId]: (prev[itemId] || 0) + 1 }));
+    setCartItems((prev) => {
+      const updatedCart = { ...prev, [itemId]: (prev[itemId] || 0) + 1 };
+      localStorage.setItem("cartItems", JSON.stringify(updatedCart)); // Save to local storage immediately
+      return updatedCart;
+    });
 
     const authToken = localStorage.getItem("auth-token");
     if (authToken) {
@@ -95,11 +99,15 @@ const ShopContextProvider = (props) => {
 
   const removeFromCart = (itemId) => {
     setCartItems((prev) => {
-      const updatedCartItems = { ...prev };
-      if (updatedCartItems[itemId] > 0) {
-        updatedCartItems[itemId] -= 1;
+      const updatedCart = { ...prev };
+      if (updatedCart[itemId] > 0) {
+        updatedCart[itemId] -= 1;
+        if (updatedCart[itemId] === 0) {
+          delete updatedCart[itemId]; // Remove item completely if quantity is zero
+        }
       }
-      return updatedCartItems;
+      localStorage.setItem("cartItems", JSON.stringify(updatedCart)); // Save to local storage immediately
+      return updatedCart;
     });
 
     const authToken = localStorage.getItem("auth-token");
@@ -126,11 +134,11 @@ const ShopContextProvider = (props) => {
 
   const getTotalCartAmount = () => {
     let totalAmount = 0;
-    for (const item in cartItems) {
-      if (cartItems[item] > 0) {
-        const itemInfo = all_product.find((product) => product.id === Number(item));
+    for (const itemId in cartItems) {
+      if (cartItems[itemId] > 0) {
+        const itemInfo = all_product.find((product) => product._id === Number(itemId));
         if (itemInfo) {
-          totalAmount += itemInfo.new_price * cartItems[item];
+          totalAmount += itemInfo.new_price * cartItems[itemId];
         }
       }
     }

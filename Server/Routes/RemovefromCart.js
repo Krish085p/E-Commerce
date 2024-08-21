@@ -22,7 +22,10 @@ router.post("/removefromcart", fetchUser, async (req, res) => {
   try {
     const { itemId } = req.body;
     let userData = await User.findById(req.user.id);
-    if (userData.cartData[itemId] > 0) userData.cartData[itemId] -= 1;
+
+    // Assuming cartData is an array of objects, and each object has an 'id' property
+    userData.cartData = userData.cartData.filter(item => item.id !== itemId);
+
     await userData.save();
     res.send("Item removed from cart");
   } catch (error) {

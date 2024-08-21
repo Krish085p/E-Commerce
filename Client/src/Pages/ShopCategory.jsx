@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import './CSS/ShopCategory.css';
 import { ShopContext } from '../Context/ShopContext';
 import dropdown_icon from '../Components/Assets/dropdown_icon.png';
@@ -8,14 +8,20 @@ const apiUrl = import.meta.env.VITE_API_URL;
 const ShopCategory = ({ banner, category }) => {
   const { all_product } = useContext(ShopContext);
 
-  // Filter products by category
-  const [filteredProducts, setFilteredProducts] = useState(all_product.filter(item => item.category === category));
+  // State for filtered products
+  const [filteredProducts, setFilteredProducts] = useState([]);
 
   // State for sorting options dropdown visibility
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   // State for the selected sorting option
   const [sortOption, setSortOption] = useState('default');
+
+  // Filter products when the component mounts or when the category changes
+  useEffect(() => {
+    const products = all_product.filter(item => item.category === category);
+    setFilteredProducts(products);
+  }, [all_product, category]);
 
   // Handle dropdown toggle
   const toggleDropdown = () => {
