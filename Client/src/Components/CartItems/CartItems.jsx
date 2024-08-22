@@ -2,6 +2,7 @@ import React, { useContext } from "react";
 import "./CartItems.css";
 import { ShopContext } from "../../Context/ShopContext";
 import remove_icon from "../Assets/cart_cross_icon.png";
+const apiUrl = import.meta.env.VITE_API_URL;
 
 const CartItems = () => {
   const { getTotalCartAmount, all_product, cartItems, removeFromCart } = useContext(ShopContext);
@@ -23,7 +24,7 @@ const CartItems = () => {
         if (quantity > 0) {
           return (
             <div className="cartitems-format" key={product.id}>
-              <img src={product.image} alt={product.name} className="carticon-product-icon" />
+              <img src={`${apiUrl}/${product.image}`} alt={product.name} className="carticon-product-icon" />
               <p>{product.name}</p>
               <p>${product.new_price}</p>
               <button className="cartitems-quantity">{quantity}</button>
