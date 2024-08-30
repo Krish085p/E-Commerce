@@ -11,8 +11,7 @@ router.post("/signup", async (req, res) => {
       return res
         .status(400)
         .json({ success: false, error: "User with this email already exists" });
-    const cartData = {};
-    for (let i = 0; i < 300; i++) cartData[i] = 0;
+    const cartData = [];
     const newUser = new User({ name: username, email, password, cartData });
     await newUser.save();
     const token = jwt.sign(

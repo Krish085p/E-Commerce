@@ -1,49 +1,51 @@
-const express = require("express");
+const express = require('express');
 const router = express.Router();
-const User = require("../Schemas/User.js");
-const jwt = require("jsonwebtoken");
-const auth = require("../Middleware/Auth.js");
-
-// Middleware to fetch and verify the user
+const User = require('../Schemas/User.js');
+const auth = require('../Middleware/Auth.js');
 
 // Route to add item to cart
-router.post("/addtocart", auth, async (req, res) => {
+router.post('/addtocart', auth, async (req, res) => {
   const { itemId } = req.body;
   if (!itemId) {
-    return res.status(400).json({ errors: "Item ID is required" });
+    return res.status(400).json({ errors: 'Item ID is required' });
   }
 
+  console.log("item id is ", itemId);
+
   try {
-    let userData = await User.findById(req.user.id);
-    if (!userData) {
-      return res.status(404).json({ errors: "User not found" });
-    }
-    
-    // Initialize cartData if not already
-    if (!userData.cartData) {
-      userData.cartData = {};
-    }
-    
-    // Ensure itemId is a string and not an object
-    if (typeof itemId !== 'string') {
-      return res.status(400).json({ errors: "Invalid item ID format" });
+    const userId = req.user.id;
+
+    console.log("user id is ", userId);
+    if (!userId || !itemId) {
+      return res.status(400).json({ errors: 'Invalid user or item ID' });
     }
 
-    // Initialize item quantity if it doesn't exist
-    if (!userData.cartData[itemId]) {
-      userData.cartData[itemId] = 0;
+    let user = await User.findById(userId);
+    console.log("user is ", user);
+    if (!user) {
+      return res.status(404).json({ errors: 'User not found' });
     }
 
-    // Increment the item quantity
-    userData.cartData[itemId] += 1;
+    if (!Array.isArray(user.cartData)) {
+      user.cartData = [];
+    }
 
-    // Save the updated user data
-    await userData.save();
+    const existingItem = user.cartData.find((item) => 
+      item.productId && item.productId.toString() === itemId.toString()
+    );
 
-    res.json({ message: "Item added to cart", cartData: userData.cartData });
+    if (existingItem) {
+      existingItem.quantity += 1;
+    } else { 
+      user.cartData.push({ productId: itemId, quantity: 1 });
+    }
+
+    await user.save();
+
+    res.json({ message: 'Item added to cart', cartData: user.cartData });
   } catch (error) {
-    console.error("Error adding item to cart:", error);
-    res.status(500).json({ errors: "Failed to add item to cart" });
+    console.error('Error adding item to cart:', error);
+    res.status(500).json({ errors: 'Failed to add item to cart' });
   }
 });
 

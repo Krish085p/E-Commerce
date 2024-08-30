@@ -4,9 +4,11 @@ const User = require("../Schemas/User.js");
 const jwt = require("jsonwebtoken");
 
 router.post("/login", async (req, res) => {
+  
   try {
     const { email, password } = req.body;
     const user = await User.findOne({ email });
+    console.log("user data is ", user);
     if (!user)
       return res.status(404).json({ success: false, error: "User not found" });
     const isPasswordValid = password === user.password;
@@ -14,7 +16,7 @@ router.post("/login", async (req, res) => {
       return res
         .status(401)
         .json({ success: false, error: "Invalid password" });
-    const token = jwt.sign({ user: { id: user.id } }, process.env.JWT_SECRET);
+    const token = jwt.sign({ user: { id: user._id } }, process.env.JWT_SECRET);
     res.json({ success: true, token });
   } catch (error) {
     console.error("Error logging in user:", error);

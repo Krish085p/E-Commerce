@@ -5,10 +5,11 @@ const jwt = require("jsonwebtoken");
 const auth = require("../Middleware/Auth.js");
 
 
-router.post("/getcart", auth, async (req, res) => {
+router.get("/getcart", auth, async (req, res) => {
   try {
     const userData = await User.findById(req.user.id);
-    res.json(userData.cartData);
+    res.json(userData?.cartData);
+    console.log(userData);
   } catch (error) {
     console.error("Error fetching cart data:", error);
     res.status(500).send("Failed to fetch cart data");
