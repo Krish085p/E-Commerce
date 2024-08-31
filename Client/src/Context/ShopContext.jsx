@@ -7,6 +7,7 @@ export const ShopContext = createContext();
 const ShopContextProvider = (props) => {
   const [all_product, setAll_Product] = useState([]);
   const [cartItems, setCartItems] = useState([]);
+  const [errors, setErrors] = useState(true);
 
   useEffect(() => {
     // Fetch all products
@@ -17,7 +18,9 @@ const ShopContextProvider = (props) => {
         setAll_Product(data);
       })
       .catch((error) => console.error("Failed to fetch products:", error));
-
+  }, []); 
+  
+  useEffect(() => {
     // Fetch cart items
     const authToken = localStorage.getItem("auth-token");
     if (authToken) {
@@ -32,16 +35,18 @@ const ShopContextProvider = (props) => {
           console.log("Cart items fetched:", data);
           // Ensure cartItems is always an array
           setCartItems(Array.isArray(data) ? data : []);
+          setErrors(false);
         })
         .catch((error) => console.error("Failed to fetch cart items:", error));
     }
-  }, []);
+  }, [errors]);
 
   const updateCartItems = (updatedCartItems) => {
     // Ensure updatedCartItems is always an array
     setCartItems(Array.isArray(updatedCartItems) ? updatedCartItems : []);
     console.log("Cart items updated:", updatedCartItems);
   };
+
 
   const addToCart = (itemId) => {
     const authToken = localStorage.getItem("auth-token");
@@ -64,6 +69,7 @@ const ShopContextProvider = (props) => {
         .then((data) => {
           console.log("Added to cart:", data);
           updateCartItems(data);
+          setErrors(true);
         })
         .catch((error) => {
           console.error("Failed to add item to cart:", error);

@@ -70,8 +70,8 @@ const CartItems = () => {
         }
         return null;
       })}
+      <h1 className="cartitem-cato">Cart Totals</h1>
       <div className="cartitems-down">
-        <h1>Cart Totals</h1>
         <div className="cartitems-total">
           <div className="cartitems-total-item">
             <p>Subtotal</p>
@@ -87,8 +87,9 @@ const CartItems = () => {
             <h3>Total</h3>
             <h3>${totalCartAmount.toFixed(2)}</h3>
           </div>
+          <button className="cartitems-checkout-btn">PROCEED TO CHECKOUT</button>
         </div>
-        <button className="cartitems-checkout-btn">PROCEED TO CHECKOUT</button>
+        
         <div className="cartitems-promocode">
           <p>If you have a promo code, enter it here</p>
           <div className="cartitems-promobox">

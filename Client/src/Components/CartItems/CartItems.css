@@ -66,6 +66,11 @@
     margin: 0 10px;
 }
 
+.cartitem-cato {
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
 .cartitems-quantity span{
     padding-right: 10px;
     padding-left: 10px;
@@ -73,14 +78,21 @@
 
 .cartitems-down {
     display: flex;
-    flex-direction: column;
-    margin-top: 50px;
+    flex-direction: row; /* Change to row direction */
+    gap: 20px; /* Space between sections */
+    width: 100%; /* Full width of the container */
 }
 
 .cartitems-total {
+    flex: 2; /* Allows the total section to take up more space */
     display: flex;
     flex-direction: column;
     gap: 20px;
+    padding: 12px;
+    border: 1px solid #555;
+    border-radius: 10px;
+
+
 }
 
 
@@ -91,7 +103,7 @@
     border-bottom: 1px solid #e2e2e2;
 }
 
-.cartitems-total button {
+.cartitems-checkout-btn{
     width: 100%;
     max-width: 262px;
     height: 58px;
@@ -106,11 +118,13 @@
 }
 
 .cartitems-promocode {
+    flex: 1; /* Allows the promo code section to take up remaining space */
     display: flex;
     flex-direction: column;
     gap: 15px;
     font-size: 16px;
     font-weight: 500;
+
 }
 
 .cartitems-promocode p {
@@ -124,6 +138,8 @@
     border-radius: 5px;
     height: 58px;
     padding: 0 20px;
+    border: 1px solid #555; /* Optional: Add border if desired */
+    justify-content: space-between; /* Align items with space between */
 }
 
 .cartitems-promobox input {
@@ -131,7 +147,7 @@
     outline: none;
     background: transparent;
     font-size: 16px;
-    flex: 1;
+    flex: 1; /* Takes up available space */
     height: 100%;
 }
 
@@ -143,7 +159,9 @@
     color: white;
     cursor: pointer;
     border: none;
-    border-radius: 5px;
+    border-radius: 4px;
+    margin-left: 10px; 
+    margin-right: -20px;
 }
 
 @media (max-width: 1280px) {
