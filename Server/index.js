@@ -37,6 +37,8 @@ const removeproduct = require("./Routes/Removeproduct");
 const signup = require("./Routes/Signup");
 const uploads = require("./Routes/Upload");
 const relatedProduct = require("./Routes/RelatedProducts");
+const increasequantity = require("./Routes/IncreasingQty");
+const decreasequantity = require("./Routes/DecraseingQty");
 
 app.use("/api", addproduct);
 app.use("/api", addtocart);
@@ -50,6 +52,8 @@ app.use("/api", removeproduct);
 app.use("/api", signup);
 app.use("/api", uploads);
 app.use("/api", relatedProduct);
+app.use("/api",decreasequantity);
+app.use("/api",increasequantity);
 
 app.use((err, req, res, next) => {
   console.error(err.stack);

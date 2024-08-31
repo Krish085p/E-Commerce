@@ -23,18 +23,9 @@ router.post("/removefromcart", auth, async (req, res) => {
       (item) => item.productId && item.productId.toString() === itemId.toString()
     );
 
-    if (itemIndex === -1) {
-      return res.status(404).json({ errors: "Item not found in cart" });
-    }
-
-    const item = user.cartData[itemIndex];
-
-    if (item.quantity > 1) {
-      user.cartData[itemIndex].quantity -= 1;
-    } else {
-     
-      user.cartData.splice(itemIndex, 1);
-    }
+  
+    user.cartData.splice(itemIndex, 1);
+    
 
     await user.save();
 

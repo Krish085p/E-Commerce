@@ -4,46 +4,56 @@ const apiUrl = import.meta.env.VITE_API_URL;
 
 export const ShopContext = createContext();
 
-const getDefaultCart = () => {
-  let cart = {};
-  for (let index = 0; index < 301; index++) { // 301 to include index 300
-    cart[index] = 0;
-  }
-  return cart;
-};
-
 const ShopContextProvider = (props) => {
   const [all_product, setAll_Product] = useState([]);
-  const [cartItems, setCartItems] = useState(getDefaultCart());
+  const [cartItems, setCartItems] = useState([]);
 
-  // Load cart items from local storage on component mount
   useEffect(() => {
-    const storedCartItems = localStorage.getItem("cartItems");
-    if (storedCartItems) {
-      setCartItems(JSON.parse(storedCartItems));
-    }
-
     // Fetch all products
     fetch(`${apiUrl}/api/allproducts`)
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-        return response.json();
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("All products fetched:", data);
+        setAll_Product(data);
       })
-      .then((data) => setAll_Product(data))
       .catch((error) => console.error("Failed to fetch products:", error));
 
-    // If user is logged in, update cart items from the server
+    // Fetch cart items
     const authToken = localStorage.getItem("auth-token");
     if (authToken) {
       fetch(`${apiUrl}/api/getcart`, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${authToken}`,
+        },
+      })
+        .then((resp) => resp.json())
+        .then((data) => {
+          console.log("Cart items fetched:", data);
+          // Ensure cartItems is always an array
+          setCartItems(Array.isArray(data) ? data : []);
+        })
+        .catch((error) => console.error("Failed to fetch cart items:", error));
+    }
+  }, []);
+
+  const updateCartItems = (updatedCartItems) => {
+    // Ensure updatedCartItems is always an array
+    setCartItems(Array.isArray(updatedCartItems) ? updatedCartItems : []);
+    console.log("Cart items updated:", updatedCartItems);
+  };
+
+  const addToCart = (itemId) => {
+    const authToken = localStorage.getItem("auth-token");
+    if (authToken) {
+      fetch(`${apiUrl}/api/addtocart`, {
         method: "POST",
         headers: {
           Accept: "application/json",
-          "auth-token": authToken,
+          Authorization: `Bearer ${authToken}`,
           "Content-Type": "application/json",
         },
+        body: JSON.stringify({ itemId }),
       })
         .then((resp) => {
           if (!resp.ok) {
@@ -52,32 +62,23 @@ const ShopContextProvider = (props) => {
           return resp.json();
         })
         .then((data) => {
-          setCartItems(data);
-          localStorage.setItem("cartItems", JSON.stringify(data)); // Update local storage
+          console.log("Added to cart:", data);
+          updateCartItems(data);
         })
-        .catch((error) => console.error("Failed to fetch cart items:", error));
+        .catch((error) => {
+          console.error("Failed to add item to cart:", error);
+        });
     }
-  }, []);
+  };
 
-  // Update local storage whenever cart items change
-  useEffect(() => {
-    localStorage.setItem("cartItems", JSON.stringify(cartItems));
-  }, [cartItems]);
-
-  const addToCart = (itemId) => {
-    setCartItems((prev) => {
-      const updatedCart = { ...prev, [itemId]: (prev[itemId] || 0) + 1 };
-      localStorage.setItem("cartItems", JSON.stringify(updatedCart)); // Save to local storage immediately
-      return updatedCart;
-    });
-
+  const decreaseQuantity = (itemId) => {
     const authToken = localStorage.getItem("auth-token");
     if (authToken) {
-      fetch(`${apiUrl}/api/addtocart`, {
+      fetch(`${apiUrl}/api/decreasequantity`, {
         method: "POST",
         headers: {
           Accept: "application/json",
-          "auth-token": authToken,
+          Authorization: `Bearer ${authToken}`,
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ itemId }),
@@ -88,35 +89,52 @@ const ShopContextProvider = (props) => {
           }
           return resp.json();
         })
-        .then((data) => console.log(data))
+        .then((data) => {
+          console.log("Quantity decreased:", data);
+          updateCartItems(data);
+        })
         .catch((error) => {
-          console.error("Failed to add item to cart:", error);
+          console.error("Failed to decrease item quantity:", error);
         });
-    } else {
-      console.warn("No auth-token found in local storage.");
+    }
+  };
+
+  const increaseQuantity = (itemId) => {
+    const authToken = localStorage.getItem("auth-token");
+    if (authToken) {
+      fetch(`${apiUrl}/api/increasequantity`, {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          Authorization: `Bearer ${authToken}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ itemId }),
+      })
+        .then((resp) => {
+          if (!resp.ok) {
+            throw new Error(`HTTP error! Status: ${resp.status}`);
+          }
+          return resp.json();
+        })
+        .then((data) => {
+          console.log("Quantity increased:", data);
+          updateCartItems(data);
+        })
+        .catch((error) => {
+          console.error("Failed to increase item quantity:", error);
+        });
     }
   };
 
   const removeFromCart = (itemId) => {
-    setCartItems((prev) => {
-      const updatedCart = { ...prev };
-      if (updatedCart[itemId] > 0) {
-        updatedCart[itemId] -= 1;
-        if (updatedCart[itemId] === 0) {
-          delete updatedCart[itemId]; // Remove item completely if quantity is zero
-        }
-      }
-      localStorage.setItem("cartItems", JSON.stringify(updatedCart)); // Save to local storage immediately
-      return updatedCart;
-    });
-
     const authToken = localStorage.getItem("auth-token");
     if (authToken) {
       fetch(`${apiUrl}/api/removefromcart`, {
         method: "POST",
         headers: {
           Accept: "application/json",
-          "auth-token": authToken,
+          Authorization: `Bearer ${authToken}`,
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ itemId }),
@@ -127,32 +145,33 @@ const ShopContextProvider = (props) => {
           }
           return resp.json();
         })
-        .then((data) => console.log(data))
-        .catch((error) => console.error("Failed to remove item from cart:", error));
+        .then((data) => {
+          console.log("Removed from cart:", data);
+          updateCartItems(data);
+        })
+        .catch((error) => {
+          console.error("Failed to remove item from cart:", error);
+        });
     }
   };
 
   const getTotalCartAmount = () => {
-    let totalAmount = 0;
-    for (const itemId in cartItems) {
-      if (cartItems[itemId] > 0) {
-        const itemInfo = all_product.find((product) => product._id === Number(itemId));
-        if (itemInfo) {
-          totalAmount += itemInfo.new_price * cartItems[itemId];
-        }
+    return Array.isArray(cartItems) ? cartItems.reduce((total, cartItem) => {
+      const product = all_product.find((p) => p._id === cartItem.productId);
+      if (product) {
+        return total + product.new_price * cartItem.quantity;
       }
-    }
-    return totalAmount;
+      return total;
+    }, 0) : 0;
   };
 
   const getTotalCartItems = () => {
-    return Object.values(cartItems).reduce((total, quantity) => total + quantity, 0);
+    return Array.isArray(cartItems) ? cartItems.reduce((total, cartItem) => total + cartItem.quantity, 0) : 0;
   };
 
   const handleLogout = () => {
     localStorage.removeItem("auth-token");
-    setCartItems(getDefaultCart()); // Reset cart items to default empty cart
-    localStorage.removeItem("cartItems"); // Clear cart items from local storage
+    setCartItems([]); // Reset cart items to an empty array
   };
 
   const contextValue = {
@@ -162,6 +181,8 @@ const ShopContextProvider = (props) => {
     cartItems,
     addToCart,
     removeFromCart,
+    increaseQuantity,
+    decreaseQuantity,
     handleLogout,
   };
 
