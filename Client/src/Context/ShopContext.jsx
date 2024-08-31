@@ -71,7 +71,7 @@ const ShopContextProvider = (props) => {
     }
   };
 
-  const decreaseQuantity = (itemId) => {
+  const decreaseQuantity = (productId) => {
     const authToken = localStorage.getItem("auth-token");
     if (authToken) {
       fetch(`${apiUrl}/api/decreasequantity`, {
@@ -81,7 +81,7 @@ const ShopContextProvider = (props) => {
           Authorization: `Bearer ${authToken}`,
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ itemId }),
+        body: JSON.stringify({ productId }),
       })
         .then((resp) => {
           if (!resp.ok) {
@@ -99,7 +99,7 @@ const ShopContextProvider = (props) => {
     }
   };
 
-  const increaseQuantity = (itemId) => {
+  const increaseQuantity = (productId) => {
     const authToken = localStorage.getItem("auth-token");
     if (authToken) {
       fetch(`${apiUrl}/api/increasequantity`, {
@@ -109,7 +109,7 @@ const ShopContextProvider = (props) => {
           Authorization: `Bearer ${authToken}`,
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ itemId }),
+        body: JSON.stringify({ productId }),
       })
         .then((resp) => {
           if (!resp.ok) {
